@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
-import LoginPage from '../pages/LoginPage';
-import UserCredentials from '../helpers/UserCredentials';
-import ApplicationURL from '../helpers/ApplicationURL';
+import LoginPage from '../../pages/LoginPage';
+import UserCredentials from '../../helpers/UserCredentials';
+import ApplicationURL from '../../helpers/ApplicationURL';
 
 test.describe('Negative login scenarios', () => {
     let loginPage: LoginPage;
