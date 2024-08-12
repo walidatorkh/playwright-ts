@@ -3,11 +3,13 @@ import LoginPage from '../../pages/LoginPage';
 import { ErrorMessages } from '../../helpers/LoginErrorMessages';
 import ApplicationURL from '../../helpers/ApplicationURL';
 
+
 test.describe('Negative login scenarios', () => {
     let loginPage: LoginPage;
 
     test.beforeEach(async ({ page }) => {
         loginPage = new LoginPage(page);
+        
     });
 
     test('Login with locked_out_user', async ({ page }) => {

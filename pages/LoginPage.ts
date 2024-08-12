@@ -28,7 +28,7 @@ export default class LoginPage extends BasePage {
         await this.validatePageUrl(ApplicationURL.BASE_URL);
         await this.usernameField.fill(username);
         await this.passwordField.fill(password);
-        await this.loginButon.click();
+        await this.clickElement(this.loginButon);
         //await this.validatePageUrl(`${ApplicationURL.BASE_URL}inventory.html`)
     }
 
