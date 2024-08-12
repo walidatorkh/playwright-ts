@@ -1,5 +1,4 @@
 import { expect, Locator, Page } from "@playwright/test";
-import UserCredentials from "../helpers/UserCredentials";
 import ApplicationURL from "../helpers/ApplicationURL";
 import { ErrorMessages } from "../helpers/LoginErrorMessages";
 import { BasePage } from "./BasePage";
@@ -22,8 +21,8 @@ export default class LoginPage extends BasePage {
     }
 
 
-    public async loginToApplication(username: string = UserCredentials.STANDARD_USER,
-        password: string = UserCredentials.CORRECT_PASSWORD,
+    public async loginToApplication(username = process.env.STANDARD_USER as string,
+        password = process.env.CORRECT_PASSWORD as string,
         url: string = ApplicationURL.BASE_URL) {
         await this.page.goto(url);
         await this.validatePageUrl(ApplicationURL.BASE_URL);

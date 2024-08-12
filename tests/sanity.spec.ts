@@ -1,6 +1,5 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import LoginPage from '../pages/LoginPage';
-import UserCredentials from '../helpers/UserCredentials';
 import ApplicationURL from '../helpers/ApplicationURL';
 import ProductsPage from '../pages/ProductsPage';
 
@@ -30,7 +29,7 @@ test('sanity test', async ({ page }) => {
 
 test('test validate products title', async ({ page }) => {
     const loginPage = new LoginPage(page);
-    await loginPage.loginToApplication(UserCredentials.PERFORMANCE_GLITCH_USER);
+    await loginPage.loginToApplication(process.env.PERFORMANCE_GLITCH_USER);
     const productsPage = new ProductsPage(page);
     await productsPage.validatePageUrl(ApplicationURL.INVENTORY_PAGE_URL);
     await productsPage.validateTitle("Products");
