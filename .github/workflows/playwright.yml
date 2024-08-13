@@ -20,13 +20,13 @@ jobs:
     - name: Run Playwright tests
       run: npx playwright test
       env:
-        STANDARD_USER: ${{vars.STANDARD_USER}}
-        LOCKED_OUT_USER: ${{vars.LOCKED_OUT_USER}}
-        PROBLEM_USER: ${{vars.PROBLEM_USER}}
-        PERFORMANCE_GLITCH_USER: ${{vars.PERFORMANCE_GLITCH_USER}}
-        ERROR_USER: ${{vars.ERROR_USER}}
-        VISUAL_USER: ${{vars.VISUAL_USER}}
-        CORRECT_PASSWORD: ${{vars.CORRECT_PASSWORD}}
+        STANDARD_USER: ${{secrets.STANDARD_USER}}
+        LOCKED_OUT_USER: ${{secrets.LOCKED_OUT_USER}}
+        PROBLEM_USER: ${{secrets.PROBLEM_USER}}
+        PERFORMANCE_GLITCH_USER: ${{secrets.PERFORMANCE_GLITCH_USER}}
+        ERROR_USER: ${{secrets.ERROR_USER}}
+        VISUAL_USER: ${{secrets.VISUAL_USER}}
+        CORRECT_PASSWORD: ${{secrets.CORRECT_PASSWORD}}
     - uses: actions/upload-artifact@v4
       if: always()
       with:
