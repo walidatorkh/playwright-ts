@@ -3,49 +3,63 @@ import LoginPage from '../pages/LoginPage';
 import ApplicationURL from '../helpers/ApplicationURL';
 import ProductsPage from '../pages/ProductsPage';
 import YourCartPage from '../pages/YourCartPage';
+import PageTitles from '../helpers/PageTitles';
+import CheckoutYourInfoPage from '../pages/CheckoutYourInfoPage';
+import CheckoutOverViewPage from '../pages/CheckoutOverview';
+import CheckoutCompletePage from '../pages/CheckoutCompletePage';
 
-test('sanity test', async ({ page }) => {
+test.describe('Sanity test block', ()=> {
 
-  const loginPage = new LoginPage(page);
-  const productsPage = new ProductsPage(page);
-  const yourCartPage = new YourCartPage(page);
+  const products = ['Sauce Labs Backpack', 'Sauce Labs Fleece Jacket', 'Sauce Labs Onesie'];
 
-  await loginPage.loginToApplication()
-  
-  await productsPage.validatePageUrl(ApplicationURL.INVENTORY_PAGE_URL);
-  await productsPage.validateTitle("Products");
+  test('Validate doing simple transaction scenario', async ({ page }) => {
 
-  await productsPage.chooseProductByTitle('Sauce Labs Backpack');
-  await productsPage.chooseProductByTitle('Sauce Labs Fleece Jacket');
-  await productsPage.chooseProductByTitle('Sauce Labs Onesie');
-
-  await productsPage.validateNumberOfItems("3");
-  await productsPage.goToCart();
-
-  //await page.locator('[data-test="shopping-cart-link"]').click();
-  await yourCartPage.validatePageUrl(ApplicationURL.YOUR_CART_PAGE_URL);
-  await yourCartPage.validateTitle("Your Cart");
-
-  await page.locator('[data-test="checkout"]').click();
-  await page.locator('[data-test="firstName"]').click();
-  await page.locator('[data-test="firstName"]').fill('Goga');
-  await page.locator('[data-test="firstName"]').press('Tab');
-  await page.locator('[data-test="lastName"]').fill('Gogi');
-  await page.locator('[data-test="lastName"]').press('Tab');
-  await page.locator('[data-test="postalCode"]').fill('123456');
-  await page.locator('[data-test="continue"]').click();
-  await page.locator('[data-test="finish"]').click();
-  await page.locator('[data-test="back-to-products"]').click();
-  await page.getByRole('button', { name: 'Open Menu' }).click();
-  await page.locator('[data-test="reset-sidebar-link"]').click();
-  await page.locator('[data-test="logout-sidebar-link"]').click();
-});
-
-test('test validate products title', async ({ page }) => {
     const loginPage = new LoginPage(page);
-    await loginPage.loginToApplication(process.env.PERFORMANCE_GLITCH_USER);
     const productsPage = new ProductsPage(page);
+    const yourCartPage = new YourCartPage(page);
+    const checkoutYourInfo = new CheckoutYourInfoPage(page);
+    const checkoutOverviewPage = new CheckoutOverViewPage(page);
+    const checkoutCompletePage = new CheckoutCompletePage(page);
+  
+    await loginPage.loginToApplication()
+    
     await productsPage.validatePageUrl(ApplicationURL.INVENTORY_PAGE_URL);
-    await productsPage.validateTitle("Products");
-});
+    await productsPage.validateTitle(PageTitles.INVENTORY_PAGE);
+  
+    await productsPage.chooseProductByTitle(products[0]);
+    await productsPage.chooseProductByTitle(products[1]);
+    await productsPage.chooseProductByTitle(products[2]);
+  
+    await productsPage.validateNumberOfItems(products.length.toString());
+    await productsPage.goToCart();
+  
+    //await page.locator('[data-test="shopping-cart-link"]').click();
+    await yourCartPage.validatePageUrl(ApplicationURL.YOUR_CART_PAGE_URL);
+    await yourCartPage.validateTitle(PageTitles.YOUR_CART_PAGE);
+    await yourCartPage.validateNumberOfItems(products.length);
+    await yourCartPage.validateItemExistInCart(products[0]);
+    await yourCartPage.validateItemExistInCart(products[1]);
+    await yourCartPage.validateItemExistInCart(products[2]);
+  
+    await yourCartPage.goToCheckout();
+
+    await checkoutYourInfo.validatePageUrl(ApplicationURL.CHECKOUT_YOUR_INFO_PAGE_URL);
+    await checkoutYourInfo.validateTitle(PageTitles.CHECKOUT_YOUR_INFO_PAGE);
+    await checkoutYourInfo.fillInfo("Gogi", "Gogov", "123456");
+    await checkoutYourInfo.goToCheckoutOverview();
+
+    await checkoutOverviewPage.validatePageUrl(ApplicationURL.CHECKOUT_OVERVIEW_PAGE_URL);
+    await checkoutOverviewPage.validateTitle(PageTitles.CHECKOUT_OVERVIEW_PAGE);
+    await checkoutOverviewPage.clickFinishButton();
+
+    await checkoutCompletePage.validatePageUrl(ApplicationURL.CHECKOUT_COMPLETE_PAGE_URL);
+    await checkoutCompletePage.validateTitle(PageTitles.CHECKOUT_COMPLETE_PAGE);
+    await checkoutCompletePage.validateFinalMessage('Thank you for your order!');
+   
+    // await page.locator('[data-test="back-to-products"]').click();
+    // await page.getByRole('button', { name: 'Open Menu' }).click();
+    // await page.locator('[data-test="reset-sidebar-link"]').click();
+    // await page.locator('[data-test="logout-sidebar-link"]').click();
+  });
+})
 
